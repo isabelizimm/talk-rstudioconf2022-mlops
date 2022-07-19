@@ -1,0 +1,256 @@
+---
+format: 
+    revealjs:
+        slide-number: true
+        theme: [default]
+        width: 1600
+        height: 900
+---
+## Demystifying MLOps
+
+rstudio::conf(2022) || isabel zimmerman
+
+## why MLOps?
+
+image of chocolate chips
+::: {.notes}
+machine learning models are like chocolate chips...
+:::
+
+## why MLOps?
+
+inside a cookie
+
+::: {.notes}
+while model development occurs in notebooks, the value of models often comes when they are integrated into a larger system
+:::
+
+## what is MLOps?
+
+_set of practices to deploy and maintain machine learning models in production reliably and efficiently_
+
+## what are some MLOps practices?
+
+- making a reproducible recipe
+- making cookies from dough
+- whoops! we burnt a few
+
+## what are some MLOps practices?
+
+![](./images/ml_ops_cycle.png)
+
+- version
+- deploy
+- monitor
+
+## version
+
+_how do we track and manage change?_
+
+## version
+
+_how do we track and manage change?_
+![](https://img.buzzfeed.com/buzzfeed-static/static/2019-08/5/20/asset/8576b62e44a1/sub-buzz-1537-1565038355-1.jpg?downsize=700%3A%2A&output-quality=auto&output-format=auto)
+
+## version
+
+`model`
+
+## version
+
+`model`, `model_final`
+
+## version
+
+`model`, `model_final`, `model_final_ACTUALLY`
+
+## version
+
+`model`, `model_final`, `model_final_ACTUALLY`, `model_final_ACTUALLY_1`
+
+## version
+
+`model`, `model_final`, `model_final_ACTUALLY`, `model_final_ACTUALLY_1`
+
+lacks context, not scalable!
+   
+## version
+
+versioning across time, but also multiple versions of things (ie, staging or production)
+
+if you think to yourself "where is that model?" or "oops, just downloaded the wrong model (again)", you might have a versioning problem
+
+## version
+
+- keep track of your models
+- choose what model is in production
+    - you want a structure that you can quickly and easily change model versions 
+- model registries (centralized location to store/version models) are great for versioning AND SHARING models with your team
+
+## version: vetiver
+
+how do we version things in vetiver?
+
+## version: vetiver
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```r
+library(vetiver)
+library(pins)
+
+model_board <- board_temp(versioned = TRUE)
+cars_lm <- lm(mpg ~ ., data = mtcars)
+
+vetiver_model(cars_lm, "cars_linear")
+model_board %>% vetiver_pin_write(v)
+```
+:::
+
+::: {.column width="50%"}
+```python
+import vetiver
+import pins
+
+model_board = board_temp(versioned = True, allow_pickle_read = True)
+cars_lm = linear_model.LinearRegression().fit(mtcars, mtcars["mpg"])
+
+v = VetiverModel(cars_lm, model_name = "cars_linear", 
+                 ptype_data = mtcars)
+vetiver_pin_write(model_board, v)
+```
+:::
+
+::::
+
+![](vetiverhex.png){width="150" height="150"} ![](pinshex.png){width="150" height="150"}
+
+## deploy
+
+taking the cookies out of the mixing bowl, time to bake!
+
+## deploy
+
+- PMML
+    - baking cookies on an open flame (image)
+    - models in XML (image?)
+    - flexible in integration 
+    - not flexibility in code
+
+## deploy
+
+- SQL stored procedures
+    - baking cookies in a waffle iron (image)
+    - models in SQL (image?)
+    - flexible in code
+    - not less flexible in integration
+    - works best if your workflow is centered around a database that you can easily interact with
+    - not always as accessible to non-technical team members
+
+![](tidypredicthex.png){width="150" height="150"}
+
+## deploy
+
+- REST APIs
+    - baking cookies in an oven (image)
+    - highly flexible in code, can deploy anything you write in R or Python
+    - highly flexible in integration, POST/GET/QUERY to these endpoints
+    - easy to use with other tools, so you keep the same workflow
+    - often comes with visual documentation to be accessible to many different skill levels
+        - interact in the browser to debug
+    - straightforward to put inside docker containers
+
+## vetiver ![](vetiverhex.png){width="150" height="150"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+_in python_
+```python
+v = VetiverModel.from_pin(board, version = "3as8d")
+
+api = VetiverAPI(v)
+api.run()
+```
+:::
+
+::: {.column width="50%"}
+```r
+library(plumber)
+
+pr() %>%
+  vetiver_api(v)
+```
+:::
+
+::::
+
+![](vetiverhex.png){width="150" height="150"}
+
+## vetiver
+
+![](visualapi.png)
+
+vetiver is built to run a bakery
+model 
+
+## monitor
+
+have a plan for how long your cookies are in the oven, but you have to keep an eye on them and adjust your plan if things aren't working out
+
+## monitor
+
+- monitor your data
+    - does your data from when you trained your model 2 months ago look the same as today?
+
+## monitor
+
+- monitor your data (data drift)
+- monitor model performance (model drift)
+    - models fail silently! and they can still run with no error, even if your accuracy is zero percent
+        more detail here
+    - i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt!
+
+
+## monitor
+
+- monitor your data
+- monitor model performance
+- know what to do with degredation
+    - back to model versioning!
+    - retraining model?
+    - new model type altogether?
+
+## vetiver
+
+[monitoring placeholder]
+
+## putting it all together
+
+best practices:
+
+- version your model
+- deploy your model
+- monitor your model
+
+## putting it all together
+
+best practices:
+
+- version your model
+- deploy your model
+- monitor your model
+
+... but also!
+
+- responsible reporting
+- data validation
+- know the steps to update a model
+
+## what now?
+
+- think of what you need from MLOps
+    - what is your strategy now? where can you add in best practices to make it better?
+
+check out vetiver in PYTHON OR R in the open source or pro products lounge
