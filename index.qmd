@@ -20,7 +20,7 @@ format:
 :::
 
 ::: {.notes}
-im here to dymystgy mlops because machine learning operations are HARD i spent a lot of time with deploying models,,,
+im here to demystfy mlops because machine learning operations are HARD i spent a lot of time with deploying models,,,
 
 more importantly I LOVE BAKING
 :::
@@ -45,7 +45,7 @@ what are some MLOps practices?
 
 ##
 
-![](./images/evolution_of_cookie.png)
+![](images/evolution_of_cookie.png)
 
 ::: {.notes}
 - write down our recipe
@@ -55,7 +55,7 @@ what are some MLOps practices?
 
 ##
 
-![](./images/ml_ops_cycle.png)
+![](images/ml_ops_cycle.png)
 
 ::: {.notes}
 - version
@@ -71,18 +71,12 @@ There are lots of tools for the righthand side of this image--if you were just a
 ## version
 _how do we track and manage change?_
 
-![](./images/recipe_card.png)
+![](images/recipe_card.png)
 
 ::: {.notes}
 try different flours, using salted or unsalted butter,
-:::
 
-## version
-
-`model`
-
-::: {.notes}
-now, i have a quick cautionary tale for you all on what happens when you don't version your model.
+quick cautionary tale
 :::
 
 ## version
@@ -111,8 +105,6 @@ not scalable
 versioning is useful to track changes across _time_, but it should also be for **different implementations**
 
 ::: {.notes}
-and this is not a new idea! most developers lovvveeee using git for this reason.
-
 you might have to think more deeply about your versioning if
 
 for time: if you think to yourself "where is that model?" or "oops, just downloaded the wrong model (again)" or 
@@ -131,51 +123,81 @@ different implementations: if you have a staging and production model. if you
 :::: {.columns}
 
 ::: {.column width="50%"}
+_in r_
 ```r
 library(vetiver)
 library(pins)
 
-model_board <- board_temp(versioned = TRUE)
-cars_lm <- lm(mpg ~ ., data = mtcars)
+model_board <- board_temp()
 
-vetiver_model(cars_lm, "cars_linear")
+v = vetiver_model(model, "model_name")
 model_board %>% vetiver_pin_write(v)
 ```
 :::
 
 ::: {.column width="50%"}
+_in python_
 ```python
 import vetiver
 import pins
 
-model_board = board_temp(versioned = True, allow_pickle_read = True)
-cars_lm = linear_model.LinearRegression().fit(mtcars, mtcars["mpg"])
+model_board = board_temp()
 
-v = VetiverModel(cars_lm, model_name = "cars_linear", 
-                 ptype_data = mtcars)
+v = VetiverModel(model, 
+    "model_name", 
+    ptype_data = mtcars)
+
 vetiver_pin_write(model_board, v)
 ```
 :::
 
 ::::
 
-![](images/vetiverhex.png){height="150"} ![](images/pinshex.png){height="150"}
+::: {.notes}
+okay, well, how did that solve our problems with scale and context?
+:::
 
+## version::vetiver
+
+```r
+
+```
+
+```
+api_version: 1
+created: 20220719T142221Z
+description: Scikit-learn  model
+file: cars_linear.joblib
+file_size: 1087
+pin_hash: 4db397b49e7bff0b
+title: 'cars_linear: a pinned LinearRegression object'
+type: joblib
+user:
+  ptype: '{"cyl": 6.0, "disp": 160.0, "hp": 110.0, "drat": 3.9, "wt": 2.62, "qsec":
+    16.46, "vs": 0.0, "am": 1.0, "gear": 4.0, "carb": 4.0}'
+  required_pkgs:
+  - vetiver
+  - scikit-learn
+```
+::: {.notes}
+okay, well, how did that solve our problems with scale and context?
+:::
 ## deploy
 
-![](./images/happy.jpg)
-
-places to deploy, not version
-
-## deploy
-
-- PMML
-
-    - flexible in integration 
-    - not flexibility in code
+![](images/happy.jpg){height="700" margin-left="700" margin-right="auto"}
 
 ::: {.notes}
-make them
+when building vetiver, we had to choose WHERE to deploy these models. there's a few options, so let's go on a quick journey to see how we made our decision.
+:::
+
+## deploy
+
+- in XML (with PMML)
+    - flexible in integration 
+    - *not* flexible in modeling
+
+::: {.notes}
+
 XML is best known for displaying documents on the internet
     - baking cookies on an open flame (image)
     - models in XML (image?)
@@ -183,12 +205,12 @@ XML is best known for displaying documents on the internet
 
 ## deploy
 
-- SQL stored procedures
+- ~~in XML (with PMML)~~
+- in databases (with SQL stored procedures)
 
-    - flexible in code
-    - not less flexible in integration
+    - flexible in modeling
+    - *not* flexible in integration
 
-![](images/tidypredicthex.png){width="150" height="150"}
 
 ::: {.notes}
 - smaller
@@ -201,15 +223,21 @@ XML is best known for displaying documents on the internet
 
 ## deploy
 
-- REST APIs
-    - highly flexible in code, can deploy anything you write in R or Python
-    - highly flexible in integration, POST/GET/QUERY to these endpoints
+- ~~in XML (with PMML)~~
+- ~~in databases (with SQL stored procedures)~~
+- in an API (with RESTful APIs)
+
+    - highly flexible in modeling
+    - highly flexible in integration
 
 ::: {.notes}
 
-this can be a rest api on your computer, in the cloud
+this can be a rest api on your computer, in the cloud ie, SAGEMAKER, ETC, if you're more interested in this, James Blair is hosting ____
 
+if youre interested in seeing this in RSConnnect, gagan and xu fei are talking 
 standard, easy
+can deploy anything you write in R or Python
+POST/GET/QUERY to these endpoints
 
     - baking cookies in an oven (image)
     - models living in application interfaces
@@ -228,8 +256,6 @@ standard, easy
 ::: {.column width="50%"}
 _in python_
 ```python
-v = VetiverModel.from_pin(board, version = "3as8d")
-
 api = VetiverAPI(v)
 api.run()
 ```
@@ -246,8 +272,6 @@ pr() %>%
 :::
 
 ::::
-
-![](images/vetiverhex.png){height="150"}
 
 ## vetiver
 
@@ -291,20 +315,42 @@ have a plan for how long your cookies are in the oven, but you have to keep an e
 ::: {.column width="50%"}
 _in python_
 ```python
-v = VetiverModel.from_pin(board, version = "3as8d")
+metrics = vetiver.compute_metrics(
+    data = new_cars, 
+    date_var = "date_obs", 
+    period = td, 
+    metric_set = metric_set, 
+    truth = "mpg", 
+    estimate = "preds"
+    )
+                    
+vetiver.pin_metrics(
+    board = model_board, 
+    df_metrics = metrics, 
+    metrics_pin_name = "tree_metrics", 
+    overwrite = True
+    )
 
-api = VetiverAPI(v)
-api.run()
+vetiver.plot_metrics(
+    df_metrics = metrics
+    )
 ```
 :::
 
 ::: {.column width="50%"}
 _in r_
 ```r
-library(plumber)
+metrics <-
+    augment(v, new_data = new_cars) %>%
+    vetiver_compute_metrics(
+        date_obs, 
+        "week", 
+        mpg, 
+        .pred)
 
-pr() %>%
-  vetiver_api(v)
+model_board %>%
+    vetiver_pin_metrics(new_metrics, "tree_metrics", overwrite = TRUE)
+
 ```
 :::
 
@@ -318,15 +364,9 @@ best practices:
 - deploy your model
 - monitor your model
 
-## putting it all together
+... 
 
-best practices:
-
-- version your model
-- deploy your model
-- monitor your model
-
-... but also!
+but also!
 
 - responsible reporting
 - data validation
@@ -334,7 +374,10 @@ best practices:
 
 ## what now?
 
+::: {.notes}
 - think of what you need from MLOps
     - what is your strategy now? where can you add in best practices to make it better?
 
 check out vetiver in PYTHON OR R in the open source or pro products lounge
+:::
+
