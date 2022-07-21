@@ -1,0 +1,23 @@
+/*-- scss:defaults --*/
+
+$vetiver-light: #f3cbac;
+$vetiver-med: #a46848;
+$vetiver-dark: #7c3c1c;
+
+$body-color: $vetiver-dark;
+
+$code-block-font-size: 36px;
+
+/*-- scss:rules --*/
+
+.reveal .slide-logo {
+  max-height: 100px !important;
+}
+
+.reveal .footer {
+  background-color: $vetiver-light;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  bottom: 0px !important; // makes sure there isn't any space below the footer box
+  z-index: -1 !important; // makes sure it is places behind the logo
+}

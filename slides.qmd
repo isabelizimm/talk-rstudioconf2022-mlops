@@ -2,96 +2,131 @@
 format: 
     revealjs:
         slide-number: true
-        theme: [default]
+        theme: [default, style.scss]
+        logo: images/vetiverhex.png
         width: 1600
         height: 900
 ---
-## Demystifying MLOps
+##
 
-rstudio::conf(2022) || isabel zimmerman
+::: {style="position: absolute; left: 480px; top: 200px; height: 525px; width: 1500px; background-color: #f3cbac; padding: 20px; padding-left: 50px; box-shadow: 15px 15px 0px 0px #a46848; border-radius: 5px;"}
+[Demystifying MLOps]{style="font-size: 120px; font-weight: bold; line-height: 1em; margin: 0px"}
 
-## why MLOps?
+<br>
 
-image of chocolate chips
-::: {.notes}
-machine learning models are like chocolate chips...
+[Isabel Zimmerman, RStudio PBC]{style="font-size: 60px; font-weight: bold;"}
+
+[rstudio::conf(2022)]{style="font-size: 50px;font-weight: bold;"}
 :::
 
-## why MLOps?
+::: {.notes}
+im here to dymystgy mlops because machine learning operations are HARD i spent a lot of time with deploying models,,,
 
-inside a cookie
+more importantly I LOVE BAKING
+:::
+
+##
+
+![](images/happy.jpg){height="700" margin-left="700" margin-right="auto"}
 
 ::: {.notes}
+machine learning models are like chocolate chips...
+
 while model development occurs in notebooks, the value of models often comes when they are integrated into a larger system
 :::
 
 ## what is MLOps?
 
-_set of practices to deploy and maintain machine learning models in production reliably and efficiently_
+set of <u>practices</u> to _deploy_ and _maintain_ machine learning models in production **reliably** and **efficiently**
 
-## what are some MLOps practices?
+::: {.notes}
+what are some MLOps practices?
+:::
 
-- making a reproducible recipe
-- making cookies from dough
-- whoops! we burnt a few
+##
 
-## what are some MLOps practices?
+![](./images/evolution_of_cookie.png)
+
+::: {.notes}
+- write down our recipe
+- baking the dough
+- making changes when things don't go as planned
+:::
+
+##
 
 ![](./images/ml_ops_cycle.png)
 
+::: {.notes}
 - version
 - deploy
 - monitor
 
-## version
+now, let's pause here for a moment-- MLOps is not a disjoint piece where data scientists can pass off models to IT, or whoever handles deployment. MLOps is part of the data science lifecycle.
 
+There are lots of tools for the righthand side of this image--if you were just at Julia and Max's keynote, this might look familiar. Well, mostly familiar.
+:::
+
+
+## version
 _how do we track and manage change?_
 
-## version
+![](./images/recipe_card.png)
 
-_how do we track and manage change?_
-![](https://img.buzzfeed.com/buzzfeed-static/static/2019-08/5/20/asset/8576b62e44a1/sub-buzz-1537-1565038355-1.jpg?downsize=700%3A%2A&output-quality=auto&output-format=auto)
+::: {.notes}
+try different flours, using salted or unsalted butter,
+:::
 
 ## version
 
 `model`
 
-## version
-
-`model`, `model_final`
-
-## version
-
-`model`, `model_final`, `model_final_ACTUALLY`
+::: {.notes}
+now, i have a quick cautionary tale for you all on what happens when you don't version your model.
+:::
 
 ## version
 
-`model`, `model_final`, `model_final_ACTUALLY`, `model_final_ACTUALLY_1`
+`model`
 
-## version
+. . .
 
-`model`, `model_final`, `model_final_ACTUALLY`, `model_final_ACTUALLY_1`
+`model_final`
 
-lacks context, not scalable!
+. . .
+
+`model_final_ACTUALLY`
+
+. . .
+
+`model_final_ACTUALLY_1`
+
+::: {.notes}
+lacks context
+not scalable
+:::
    
 ## version
 
-versioning across time, but also multiple versions of things (ie, staging or production)
+versioning is useful to track changes across _time_, but it should also be for **different implementations**
 
-if you think to yourself "where is that model?" or "oops, just downloaded the wrong model (again)", you might have a versioning problem
+::: {.notes}
+and this is not a new idea! most developers lovvveeee using git for this reason.
 
-## version
+you might have to think more deeply about your versioning if
+
+for time: if you think to yourself "where is that model?" or "oops, just downloaded the wrong model (again)" or 
+
+different implementations: if you have a staging and production model. if you 
 
 - keep track of your models
 - choose what model is in production
     - you want a structure that you can quickly and easily change model versions 
 - model registries (centralized location to store/version models) are great for versioning AND SHARING models with your team
 
-## version: vetiver
+:::
 
-how do we version things in vetiver?
-
-## version: vetiver
+## version::vetiver
 
 :::: {.columns}
 
@@ -124,44 +159,69 @@ vetiver_pin_write(model_board, v)
 
 ::::
 
-![](vetiverhex.png){width="150" height="150"} ![](pinshex.png){width="150" height="150"}
+![](images/vetiverhex.png){height="150"} ![](images/pinshex.png){height="150"}
 
 ## deploy
 
-taking the cookies out of the mixing bowl, time to bake!
+![](./images/happy.jpg)
+
+places to deploy, not version
 
 ## deploy
 
 - PMML
-    - baking cookies on an open flame (image)
-    - models in XML (image?)
+
     - flexible in integration 
     - not flexibility in code
+
+::: {.notes}
+make them
+XML is best known for displaying documents on the internet
+    - baking cookies on an open flame (image)
+    - models in XML (image?)
+:::
 
 ## deploy
 
 - SQL stored procedures
-    - baking cookies in a waffle iron (image)
-    - models in SQL (image?)
+
     - flexible in code
     - not less flexible in integration
+
+![](images/tidypredicthex.png){width="150" height="150"}
+
+::: {.notes}
+- smaller
+    - baking cookies in a waffle iron (image)
+    - models saved in a database
     - works best if your workflow is centered around a database that you can easily interact with
     - not always as accessible to non-technical team members
 
-![](tidypredicthex.png){width="150" height="150"}
+:::
 
 ## deploy
 
 - REST APIs
-    - baking cookies in an oven (image)
     - highly flexible in code, can deploy anything you write in R or Python
     - highly flexible in integration, POST/GET/QUERY to these endpoints
+
+::: {.notes}
+
+this can be a rest api on your computer, in the cloud
+
+standard, easy
+
+    - baking cookies in an oven (image)
+    - models living in application interfaces
     - easy to use with other tools, so you keep the same workflow
     - often comes with visual documentation to be accessible to many different skill levels
-        - interact in the browser to debug
+    - interact in the browser to debug
     - straightforward to put inside docker containers
 
-## vetiver ![](vetiverhex.png){width="150" height="150"}
+:::
+
+
+## vetiver
 
 :::: {.columns}
 
@@ -176,6 +236,7 @@ api.run()
 :::
 
 ::: {.column width="50%"}
+_in r_
 ```r
 library(plumber)
 
@@ -186,18 +247,19 @@ pr() %>%
 
 ::::
 
-![](vetiverhex.png){width="150" height="150"}
+![](images/vetiverhex.png){height="150"}
 
 ## vetiver
 
-![](visualapi.png)
-
-vetiver is built to run a bakery
-model 
+![](images/visualapi.png)
 
 ## monitor
 
+![](images/burnt.jpg)
+
+:::{.notes}
 have a plan for how long your cookies are in the oven, but you have to keep an eye on them and adjust your plan if things aren't working out
+:::
 
 ## monitor
 
@@ -224,7 +286,29 @@ have a plan for how long your cookies are in the oven, but you have to keep an e
 
 ## vetiver
 
-[monitoring placeholder]
+:::: {.columns}
+
+::: {.column width="50%"}
+_in python_
+```python
+v = VetiverModel.from_pin(board, version = "3as8d")
+
+api = VetiverAPI(v)
+api.run()
+```
+:::
+
+::: {.column width="50%"}
+_in r_
+```r
+library(plumber)
+
+pr() %>%
+  vetiver_api(v)
+```
+:::
+
+::::
 
 ## putting it all together
 
