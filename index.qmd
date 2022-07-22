@@ -27,7 +27,7 @@ more importantly I LOVE BAKING
 
 ##
 
-![](images/happy.jpg){height="700" margin-left="700" margin-right="auto"}
+![](images/happy.jpg){height="700" margin-left="700" margin-right="auto" fig-alt="cartoon cookie smiling"}
 
 ::: {.notes}
 machine learning models are like chocolate chips...
@@ -71,7 +71,7 @@ There are lots of tools for the righthand side of this image--if you were just a
 ## version
 _how do we track and manage change?_
 
-![](images/recipe_card.png)
+![](images/recipe_card.png){fig-alt="cartoon recipe card"}
 
 ::: {.notes}
 try different flours, using salted or unsalted butter,
@@ -129,9 +129,6 @@ library(vetiver)
 library(pins)
 
 model_board <- board_temp()
-
-v = vetiver_model(model, "model_name")
-model_board %>% vetiver_pin_write(v)
 ```
 :::
 
@@ -141,12 +138,77 @@ _in python_
 import vetiver
 import pins
 
-model_board = board_temp()
+model_board = board_temp(
+    allow_pickle_read = True)
+```
+:::
 
-v = VetiverModel(model, 
-    "model_name", 
+::::
+
+![](images/pinshex.png){height=150px, fig-alt="pins hex sticker"}
+
+## version::vetiver
+
+:::: {.columns}
+
+::: {.column width="50%"}
+_in r_
+```r
+library(vetiver)
+library(pins)
+
+model_board <- board_temp()
+
+v <- vetiver_model(model, "name")
+```
+:::
+
+::: {.column width="50%"}
+_in python_
+```python
+import vetiver
+import pins
+
+model_board = board_temp(
+    allow_pickle_read = True)
+
+v = VetiverModel(model, "name", 
     ptype_data = mtcars)
+```
+:::
 
+::::
+
+## version::vetiver
+
+:::: {.columns}
+
+::: {.column width="50%"}
+_in r_
+```r
+library(vetiver)
+library(pins)
+
+model_board <- board_temp()
+
+v <- vetiver_model(model, "name")
+
+model_board %>% 
+    vetiver_pin_write(v)
+```
+:::
+
+::: {.column width="50%"}
+_in python_
+```python
+import vetiver
+import pins
+
+model_board = board_temp(
+    allow_pickle_read = True)
+
+v = VetiverModel(model, "name", 
+    ptype_data = mtcars)
 vetiver_pin_write(model_board, v)
 ```
 :::
@@ -159,19 +221,33 @@ okay, well, how did that solve our problems with scale and context?
 
 ## version::vetiver
 
+:::: {.columns}
+
+::: {.column width="50%"}
+```python
+model_board.pin_meta("name")
+```
+::: 
+
+::: {.column width="50%"}
+
 ```r
+model_board %>% pin_meta("name")
+```
+:::
+
+::::
 
 ```
-
-```
-api_version: 1
 created: 20220719T142221Z
 description: Scikit-learn  model
-file: cars_linear.joblib
+file: name.joblib
 file_size: 1087
 pin_hash: 4db397b49e7bff0b
-title: 'cars_linear: a pinned LinearRegression object'
+title: 'name: a pinned LinearRegression object'
 type: joblib
+```
+```
 user:
   ptype: '{"cyl": 6.0, "disp": 160.0, "hp": 110.0, "drat": 3.9, "wt": 2.62, "qsec":
     16.46, "vs": 0.0, "am": 1.0, "gear": 4.0, "carb": 4.0}'
@@ -179,12 +255,14 @@ user:
   - vetiver
   - scikit-learn
 ```
+
 ::: {.notes}
 okay, well, how did that solve our problems with scale and context?
 :::
+
 ## deploy
 
-![](images/happy.jpg){height="700" margin-left="700" margin-right="auto"}
+![](images/happy.jpg){height="700" margin-left="700" margin-right="auto" fig-alt="cartoon cookie smiling"}
 
 ::: {.notes}
 when building vetiver, we had to choose WHERE to deploy these models. there's a few options, so let's go on a quick journey to see how we made our decision.
@@ -195,6 +273,8 @@ when building vetiver, we had to choose WHERE to deploy these models. there's a 
 - in XML (with PMML)
     - flexible in integration 
     - *not* flexible in modeling
+
+![](images/fire.JPG){height="500" margin-left="700" margin-right="auto" fig-alt="cartoon cookie in this is fine fire meme"}
 
 ::: {.notes}
 
@@ -211,6 +291,7 @@ XML is best known for displaying documents on the internet
     - flexible in modeling
     - *not* flexible in integration
 
+![](images/waffle.png){height="400" margin-left="700" margin-right="auto" fig-alt="cartoon cookie with waffle iron pattern"}
 
 ::: {.notes}
 - smaller
@@ -229,6 +310,8 @@ XML is best known for displaying documents on the internet
 
     - highly flexible in modeling
     - highly flexible in integration
+
+![](images/ovenbffs.png){height="350" margin-left="700" margin-right="auto" fig-alt="cartoon cookie holding hands with cartoon oven"}
 
 ::: {.notes}
 
@@ -273,13 +356,11 @@ pr() %>%
 
 ::::
 
-## vetiver
-
-![](images/visualapi.png)
+## {background-video="images/apidocs.mp4"}
 
 ## monitor
 
-![](images/burnt.jpg)
+![](images/burnt.jpg){height="700" margin-left="700" margin-right="auto" fig-alt="cartoon cookie, slightly burnt"}
 
 :::{.notes}
 have a plan for how long your cookies are in the oven, but you have to keep an eye on them and adjust your plan if things aren't working out
@@ -287,26 +368,38 @@ have a plan for how long your cookies are in the oven, but you have to keep an e
 
 ## monitor
 
-- monitor your data
-    - does your data from when you trained your model 2 months ago look the same as today?
+- monitor for data drift
+
+
+:::{.notes}
+does your data from when you trained your model 2 months ago look the same as today?
+:::
 
 ## monitor
 
-- monitor your data (data drift)
-- monitor model performance (model drift)
-    - models fail silently! and they can still run with no error, even if your accuracy is zero percent
-        more detail here
-    - i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt!
+- monitor for data drift
+- monitor for model drift
 
+
+:::{.notes}
+- models fail silently! and they can still run with no error, even if your accuracy is zero percent
+    more detail here
+- i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt!
+:::
 
 ## monitor
 
-- monitor your data
-- monitor model performance
-- know what to do with degredation
+- monitor for data drift
+- monitor for model drift
+- know what to do when things go wrong
+
+
+:::{.notes}
+if performance is declining, 
     - back to model versioning!
     - retraining model?
     - new model type altogether?
+:::
 
 ## vetiver
 
@@ -316,23 +409,12 @@ have a plan for how long your cookies are in the oven, but you have to keep an e
 _in python_
 ```python
 metrics = vetiver.compute_metrics(
-    data = new_cars, 
-    date_var = "date_obs", 
-    period = td, 
-    metric_set = metric_set, 
-    truth = "mpg", 
-    estimate = "preds"
-    )
-                    
-vetiver.pin_metrics(
-    board = model_board, 
-    df_metrics = metrics, 
-    metrics_pin_name = "tree_metrics", 
-    overwrite = True
-    )
-
-vetiver.plot_metrics(
-    df_metrics = metrics
+    new_data, 
+    "date_col", 
+    timedelta(weeks = 1), 
+    metric_set, 
+    "mpg", 
+    "preds"
     )
 ```
 :::
@@ -341,43 +423,113 @@ vetiver.plot_metrics(
 _in r_
 ```r
 metrics <-
-    augment(v, new_data = new_cars) %>%
+    augment(v, new_data = new) %>%
     vetiver_compute_metrics(
-        date_obs, 
+        date_col, 
         "week", 
         mpg, 
-        .pred)
-
-model_board %>%
-    vetiver_pin_metrics(new_metrics, "tree_metrics", overwrite = TRUE)
-
+        .pred
+        )
 ```
 :::
 
 ::::
 
+## vetiver
+
+:::: {.columns}
+
+::: {.column width="50%"}
+_in python_
+```python
+# compute, then ... 
+
+vetiver.pin_metrics(
+    model_board, 
+    metrics, 
+    "metrics_pin_name", 
+    overwrite = True
+    )
+```
+:::
+
+::: {.column width="50%"}
+_in r_
+```r
+# compute, then ... 
+
+model_board %>%
+    vetiver_pin_metrics(
+        metrics, 
+        "metrics_pin_name", 
+        overwrite = TRUE
+        )
+```
+:::
+
+::::
+
+
+## vetiver
+
+:::: {.columns}
+
+::: {.column width="50%"}
+_in python_
+```python
+# compute and pin, then ...
+
+vetiver.plot_metrics(metrics)
+```
+:::
+
+::: {.column width="50%"}
+_in r_
+```r
+# compute and pin, then ...
+
+vetiver_plot_metrics(metrics)
+```
+:::
+
+::::
+
+![](images/monitor.png){fig-alt="line chart showing model performance metrics over time" class = "center"}
+
 ## putting it all together
 
 best practices:
 
-- version your model
-- deploy your model
-- monitor your model
+- **version** your model
+- _deploy_ your model
+- <u>monitor</u> your model
 
-... 
+. . .
 
 but also!
 
 - responsible reporting
 - data validation
-- know the steps to update a model
+- more!
 
-## what now?
+
+## 
+![](images/final.png){fig-alt="cartoon cookies holding hands, with the last cookie in thought about the MLOps cycle"}
 
 ::: {.notes}
-- think of what you need from MLOps
-    - what is your strategy now? where can you add in best practices to make it better?
+must be end of our time, our cookies are taking a bow...
+
+challenge you think of what your own data science workflow...where can you add in MLOps best practices to make it better?
 
 check out vetiver in PYTHON OR R in the open source or pro products lounge
+---
+what's next for vetiver?
+taking a nap!
+building out workflows for cloud
+
+what models are supported?
+
+explainability?
+
 :::
 
