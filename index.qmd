@@ -27,7 +27,7 @@ more importantly I LOVE BAKING
 
 ##
 
-![](images/happy.jpg){height="700" margin-left="700" margin-right="auto" fig-alt="cartoon cookie smiling"}
+![](images/happy.jpg){height="700" fig-align="center" fig-alt="cartoon cookie smiling"}
 
 ::: {.notes}
 machine learning models are like chocolate chips...
@@ -40,6 +40,8 @@ while model development occurs in notebooks, the value of models often comes whe
 set of <u>practices</u> to _deploy_ and _maintain_ machine learning models in production **reliably** and **efficiently**
 
 ::: {.notes}
+guidelines to help your model live outside a notebook
+
 what are some MLOps practices?
 :::
 
@@ -58,25 +60,26 @@ what are some MLOps practices?
 ![](images/ml_ops_cycle.png)
 
 ::: {.notes}
+in the data science world... a few practices that come to mind are...
 - version
 - deploy
 - monitor
 
-now, let's pause here for a moment-- MLOps is not a disjoint piece where data scientists can pass off models to IT, or whoever handles deployment. MLOps is part of the data science lifecycle.
+now, let's pause here for a moment-- MLOps is not a disjoint piece where data scientists can pass off models to IT, or whoever handles deployment. MLOps is part of the data science lifecycle....
 
-There are lots of tools for the righthand side of this image--if you were just at Julia and Max's keynote, this might look familiar. Well, mostly familiar.
+vetiver is a package in r and a package in python. this means that you can use install.packages or pip install or both to get started!
 :::
 
 
 ## version
 _how do we track and manage change?_
 
-![](images/recipe_card.png){fig-alt="cartoon recipe card"}
+![](images/recipe_card.png){fig-align="center" fig-alt="cartoon recipe card"}
 
 ::: {.notes}
-try different flours, using salted or unsalted butter,
+when i bake, sometimes i try to make a new recipe. i'll test out gluten free flour, an egg replacement, and i'll mark down how i changed it, in case i want to re-use the recipe later.
 
-quick cautionary tale
+in the ds world...
 :::
 
 ## version
@@ -105,16 +108,12 @@ not scalable
 versioning is useful to track changes across _time_, but it should also be for **different implementations**
 
 ::: {.notes}
-you might have to think more deeply about your versioning if
 
-for time: if you think to yourself "where is that model?" or "oops, just downloaded the wrong model (again)" or 
+we saw how versioning might be useful across time. might need to update a model days, or months from now, so it helps to have structure and context around how you version.
 
-different implementations: if you have a staging and production model. if you 
+this is also important if you have different implementations-- for example, staging and production.
 
-- keep track of your models
-- choose what model is in production
-    - you want a structure that you can quickly and easily change model versions 
-- model registries (centralized location to store/version models) are great for versioning AND SHARING models with your team
+really, anytime you have multiple models saved, some sort of versioning will help organize your models and make it easier to deploy later on.
 
 :::
 
@@ -145,7 +144,13 @@ model_board = board_temp(
 
 ::::
 
-![](images/pinshex.png){height=150px, fig-alt="pins hex sticker"}
+![](images/pinshex.png){height="150" bottom="0" fig-align="right" fig-alt="pins hex sticker"}
+
+::: {.notes}
+vetiver has a secret best friend pins, which is also available as a package in r and python.
+
+board holds, organizes, and created metadata for almost any objects, but it has some special features when you use a vetiver model
+:::
 
 ## version::vetiver
 
@@ -216,7 +221,9 @@ vetiver_pin_write(model_board, v)
 ::::
 
 ::: {.notes}
-okay, well, how did that solve our problems with scale and context?
+then, you write your pin to your board and pins will automatically version it for you. you can also read a specific version of the pin at a later date, and your model will be loaded right into memory!
+
+we can see that pins helps with scale, but what about context?
 :::
 
 ## version::vetiver
@@ -224,15 +231,15 @@ okay, well, how did that solve our problems with scale and context?
 :::: {.columns}
 
 ::: {.column width="50%"}
-```python
-model_board.pin_meta("name")
-```
-::: 
-
-::: {.column width="50%"}
 
 ```r
 model_board %>% pin_meta("name")
+```
+:::
+
+::: {.column width="50%"}
+```python
+model_board.pin_meta("name")
 ```
 :::
 
@@ -257,8 +264,9 @@ user:
 ```
 
 ::: {.notes}
-okay, well, how did that solve our problems with scale and context?
+with infrastructure to version our model, it is time to
 :::
+
 
 ## deploy
 
@@ -277,10 +285,9 @@ when building vetiver, we had to choose WHERE to deploy these models. there's a 
 ![](images/fire.JPG){height="500" margin-left="700" margin-right="auto" fig-alt="cartoon cookie in this is fine fire meme"}
 
 ::: {.notes}
+one option was to deploy models in XML. in the baking world, this is like baking a cookie over an open flame-- while fires are, very portable, they're not very customizable in temperature
 
-XML is best known for displaying documents on the internet
-    - baking cookies on an open flame (image)
-    - models in XML (image?)
+XML is best known for displaying documents on the internet, but using PMML to deploy your model gives you only limited options in models. so, this was not the right place for most data scientists.
 :::
 
 ## deploy
@@ -294,12 +301,11 @@ XML is best known for displaying documents on the internet
 ![](images/waffle.png){height="400" margin-left="700" margin-right="auto" fig-alt="cartoon cookie with waffle iron pattern"}
 
 ::: {.notes}
-- smaller
-    - baking cookies in a waffle iron (image)
-    - models saved in a database
-    - works best if your workflow is centered around a database that you can easily interact with
-    - not always as accessible to non-technical team members
+our next option was to deploy models in databases, using sql stored procedures
 
+baking cookies in a waffle iron-- works reaaalllyyyy well for some recipes, but others you just kind of end up with partially burned/partially goopy mess
+
+this is a great option for people who have model lifecycles based around a database that you can easily interact with. but this is a bit too niche to be a best-case scenario, so we had to continue our quest find the perfect method of deploying models.
 :::
 
 ## deploy
@@ -314,35 +320,20 @@ XML is best known for displaying documents on the internet
 ![](images/ovenbffs.png){height="350" margin-left="700" margin-right="auto" fig-alt="cartoon cookie holding hands with cartoon oven"}
 
 ::: {.notes}
+...
+best friends with your OVEN, known for its predictable temperatures and easy to use interface that makes baking a great activity for all skill levels.
 
-this can be a rest api on your computer, in the cloud ie, SAGEMAKER, ETC, if you're more interested in this, James Blair is hosting ____
+rest apis are interfaces that can connect applications in a standardized way. 
 
-if youre interested in seeing this in RSConnnect, gagan and xu fei are talking 
-standard, easy
-can deploy anything you write in R or Python
-POST/GET/QUERY to these endpoints
+Any model you can write, you can deploy to a rest API. You can interact in the browser to debug. You can deploy on your computer, an on-prem server, inside a docker container, or in pretty much all cloud providers. I don't have time to go into all the different deployment options, but I know my colleague James Blair is hosting a birds of a feather session for AWS Sagemaker that includes vetiver tomorrow morning, and there's another talk called "Yes, You can Use Python With RStudio Team" by my colleagues Xu Fei and Gagan tomorrow afternoon.
 
-    - baking cookies in an oven (image)
-    - models living in application interfaces
-    - easy to use with other tools, so you keep the same workflow
-    - often comes with visual documentation to be accessible to many different skill levels
-    - interact in the browser to debug
-    - straightforward to put inside docker containers
-
+And one more reason to be excited about rest APIs--they are quite accessible for different skill levels, with visual documentation automatically created in the API endpoint, so teammates who maybe aren't as modeling obsessed as present company are still able to discover and interact with your model, without even having to download R or Python.
 :::
 
 
 ## vetiver
 
 :::: {.columns}
-
-::: {.column width="50%"}
-_in python_
-```python
-api = VetiverAPI(v)
-api.run()
-```
-:::
 
 ::: {.column width="50%"}
 _in r_
@@ -354,16 +345,43 @@ pr() %>%
 ```
 :::
 
+::: {.column width="50%"}
+_in python_
+```python
+api = VetiverAPI(v)
+api.run()
+```
+:::
+
 ::::
 
-## {background-video="images/apidocs.mp4"}
+## {background-image="images/deploy12.png" background-position="center"}
+
+:::{.notes}
+prepopulated with
+:::
+
+## {background-image="images/deploy22.gif"}
+
+:::{.notes}
+ping endpoint
+predict endpoint
+interact with the model
+see more information about your API
+:::
+
+## {background-image="images/deploy3.gif"}
+
+:::{.notes}
+you can make predictions, including batch predictions, from your endpoint from INSIDE YOUR NOTEBOOK--feels like it is inside your environment, even though it ISNT
+:::
 
 ## monitor
 
 ![](images/burnt.jpg){height="700" margin-left="700" margin-right="auto" fig-alt="cartoon cookie, slightly burnt"}
 
 :::{.notes}
-have a plan for how long your cookies are in the oven, but you have to keep an eye on them and adjust your plan if things aren't working out
+now that the cookies are in the API oven, we have to keep an eye on them so they don't burn!
 :::
 
 ## monitor
@@ -382,9 +400,11 @@ does your data from when you trained your model 2 months ago look the same as to
 
 
 :::{.notes}
-- models fail silently! and they can still run with no error, even if your accuracy is zero percent
-    more detail here
-- i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt!
+model drift when your model's performance metrics start decaying. this is SO IMPORTANT TO TRACK. models fail silently! and they can still run with no error, even if your accuracy is zero percent--
+
+if you are not monitoring your model in some way, you are oblivious to decay.
+
+- i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt to keep a customer!
 :::
 
 ## monitor
@@ -396,28 +416,14 @@ does your data from when you trained your model 2 months ago look the same as to
 
 :::{.notes}
 if performance is declining, 
-    - back to model versioning!
     - retraining model?
     - new model type altogether?
+
+if you are using model versioning, it becomes easier to roll back to the latest version
 :::
 
 ## vetiver
-
 :::: {.columns}
-
-::: {.column width="50%"}
-_in python_
-```python
-metrics = vetiver.compute_metrics(
-    new_data, 
-    "date_col", 
-    timedelta(weeks = 1), 
-    metric_set, 
-    "mpg", 
-    "preds"
-    )
-```
-:::
 
 ::: {.column width="50%"}
 _in r_
@@ -433,25 +439,38 @@ metrics <-
 ```
 :::
 
+::: {.column width="50%"}
+_in python_
+```python
+metrics = vetiver.compute_metrics(
+    new_data, 
+    "date_col", 
+    timedelta(weeks = 1), 
+    metric_set, 
+    "mpg", 
+    "preds"
+    )
+```
+:::
+
 ::::
+
+:::{.notes}
+vetiver monitoring looks at a model over time, since, even if time isn't a feature used for predictions, it does affect your model.
+
+you will start with a dataframe with information you've gathered since you deployed your model. vetiver needs column names for
+
+- name of the column with the date the prediction was made
+- name of column for the actual value
+- name of column for predicted values
+
+- time frame you're wanting to aggregate (1 week, 2 weeks)
+- set of metrics you wish to compute (R Side has a default, python you'll have to specify what metrics(RMSE, R^2, etc))
+:::
 
 ## vetiver
 
 :::: {.columns}
-
-::: {.column width="50%"}
-_in python_
-```python
-# compute, then ... 
-
-vetiver.pin_metrics(
-    model_board, 
-    metrics, 
-    "metrics_pin_name", 
-    overwrite = True
-    )
-```
-:::
 
 ::: {.column width="50%"}
 _in r_
@@ -467,21 +486,29 @@ model_board %>%
 ```
 :::
 
+::: {.column width="50%"}
+_in python_
+```python
+# compute, then ... 
+
+vetiver.pin_metrics(
+    model_board, 
+    metrics, 
+    "metrics_pin_name", 
+    overwrite = True
+    )
+```
+:::
+
 ::::
 
+:::{.notes}
+once computed, you can pin the dataframe of metrics to keep a log of your model performance! give it a fancy name, and you can also specify if you would like to overwrite any overlapping dates from the last time you computed/pinned metrics.
+:::
 
 ## vetiver
 
 :::: {.columns}
-
-::: {.column width="50%"}
-_in python_
-```python
-# compute and pin, then ...
-
-vetiver.plot_metrics(metrics)
-```
-:::
 
 ::: {.column width="50%"}
 _in r_
@@ -492,9 +519,22 @@ vetiver_plot_metrics(metrics)
 ```
 :::
 
+::: {.column width="50%"}
+_in python_
+```python
+# compute and pin, then ...
+
+vetiver.plot_metrics(metrics)
+```
+:::
+
 ::::
 
-![](images/monitor.png){fig-alt="line chart showing model performance metrics over time" class = "center"}
+![](images/monitor.png){height="500" fig-align="center" fig-alt="line chart showing model performance metrics over time"}
+
+:::{.notes}
+finally, you can plot these metrics to get an out-of-the-box
+:::
 
 ## putting it all together
 
@@ -512,6 +552,19 @@ but also!
 - data validation
 - more!
 
+::: {.notes}
+versioning, deploying, and monitoring are the three main verbs i want you all to walk away with when thinking about vetiver. but, 
+
+model cards:
+- partially automated rmarkdown template
+- relevant factors for your model: environmental, technical, or ethical
+
+input data prototype:
+- validate data types at prediction time
+- data at the actual API endpoint does not look the same as when you trained it. (dates)
+
+...many more best practices to keep in mind...
+:::
 
 ## 
 ![](images/final.png){fig-alt="cartoon cookies holding hands, with the last cookie in thought about the MLOps cycle"}
@@ -521,15 +574,29 @@ must be end of our time, our cookies are taking a bow...
 
 challenge you think of what your own data science workflow...where can you add in MLOps best practices to make it better?
 
-check out vetiver in PYTHON OR R in the open source or pro products lounge
+check out vetiver in PYTHON OR R, and come visit in the open source or pro products lounge
 ---
 what's next for vetiver?
 taking a nap!
-building out workflows for cloud
+building out workflows for cloud, supporting more model types
 
 what models are supported?
+tidymodels workflow
+caret
+mlr3
+XGBoost
+ranger
+lm() and glm()
+torch
+scikit learn
 
 explainability?
+
+how does monitoring work?
+partially deployment related. in connect, you can run a cron job! most cloud vendors will allow you to run scripts on some sort of cadence
+
+what if SQL?
+tidypredict :)
 
 :::
 

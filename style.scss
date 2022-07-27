@@ -8,6 +8,8 @@ $body-color: $vetiver-dark;
 
 $code-block-font-size: 30px;
 
+$p: 40px;
+
 /*-- scss:rules --*/
 
 .reveal .slide-logo {
@@ -16,7 +18,7 @@ $code-block-font-size: 30px;
 
 .reveal .footer {
   background-color: $vetiver-light;
-  padding-top: 15px;
+  padding-top: 30px;
   padding-bottom: 20px;
   bottom: 0px !important; // makes sure there isn't any space below the footer box
   z-index: -1 !important; // makes sure it is places behind the logo

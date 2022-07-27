@@ -407,7 +407,11 @@
 </section>
 <section id="section-1" class="slide level2">
 <h2></h2>
-<p><img data-src="images/happy.jpg" data-margin-left="700" data-margin-right="auto" alt="cartoon cookie smiling" height="700"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/happy.jpg" alt="cartoon cookie smiling" height="700"></p>
+</figure>
+</div>
 <aside class="notes">
 <p>machine learning models are like chocolate chips…</p>
 <p>while model development occurs in notebooks, the value of models often comes when they are integrated into a larger system</p>
@@ -427,6 +431,7 @@
 <h2>what is MLOps?</h2>
 <p>set of <u>practices</u> to <em>deploy</em> and <em>maintain</em> machine learning models in production <strong>reliably</strong> and <strong>efficiently</strong></p>
 <aside class="notes">
+<p>guidelines to help your model live outside a notebook</p>
 <p>what are some MLOps practices?</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -465,13 +470,9 @@
 <h2></h2>
 <p><img data-src="images/ml_ops_cycle.png"></p>
 <aside class="notes">
-<ul>
-<li>version</li>
-<li>deploy</li>
-<li>monitor</li>
-</ul>
-<p>now, let’s pause here for a moment– MLOps is not a disjoint piece where data scientists can pass off models to IT, or whoever handles deployment. MLOps is part of the data science lifecycle.</p>
-<p>There are lots of tools for the righthand side of this image–if you were just at Julia and Max’s keynote, this might look familiar. Well, mostly familiar.</p>
+<p>in the data science world… a few practices that come to mind are… - version - deploy - monitor</p>
+<p>now, let’s pause here for a moment– MLOps is not a disjoint piece where data scientists can pass off models to IT, or whoever handles deployment. MLOps is part of the data science lifecycle….</p>
+<p>vetiver is a package in r and a package in python. this means that you can use install.packages or pip install or both to get started!</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -487,10 +488,14 @@
 <section id="version" class="slide level2">
 <h2>version</h2>
 <p><em>how do we track and manage change?</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
 <p><img data-src="images/recipe_card.png" alt="cartoon recipe card"></p>
+</figure>
+</div>
 <aside class="notes">
-<p>try different flours, using salted or unsalted butter,</p>
-<p>quick cautionary tale</p>
+<p>when i bake, sometimes i try to make a new recipe. i’ll test out gluten free flour, an egg replacement, and i’ll mark down how i changed it, in case i want to re-use the recipe later.</p>
+<p>in the ds world…</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -533,17 +538,9 @@
 <h2>version</h2>
 <p>versioning is useful to track changes across <em>time</em>, but it should also be for <strong>different implementations</strong></p>
 <aside class="notes">
-<p>you might have to think more deeply about your versioning if</p>
-<p>for time: if you think to yourself “where is that model?” or “oops, just downloaded the wrong model (again)” or</p>
-<p>different implementations: if you have a staging and production model. if you</p>
-<ul>
-<li>keep track of your models</li>
-<li>choose what model is in production
-<ul>
-<li>you want a structure that you can quickly and easily change model versions</li>
-</ul></li>
-<li>model registries (centralized location to store/version models) are great for versioning AND SHARING models with your team</li>
-</ul>
+<p>we saw how versioning might be useful across time. might need to update a model days, or months from now, so it helps to have structure and context around how you version.</p>
+<p>this is also important if you have different implementations– for example, staging and production.</p>
+<p>really, anytime you have multiple models saved, some sort of versioning will help organize your models and make it easier to deploy later on.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -574,8 +571,26 @@
 <span id="cb2-5"><a href="#cb2-5"></a>    allow_pickle_read <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-
-<img data-src="images/pinshex.png" alt="pins hex sticker" class="r-stretch"></section>
+<div class="quarto-figure quarto-figure-right">
+<figure>
+<p><img data-src="images/pinshex.png" data-bottom="0" alt="pins hex sticker" height="150"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>vetiver has a secret best friend pins, which is also available as a package in r and python.</p>
+<p>board holds, organizes, and created metadata for almost any objects, but it has some special features when you use a vetiver model</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
 <section id="versionvetiver-1" class="slide level2">
 <h2>version::vetiver</h2>
 <div class="columns">
@@ -628,7 +643,8 @@
 </div>
 </div>
 <aside class="notes">
-<p>okay, well, how did that solve our problems with scale and context?</p>
+<p>then, you write your pin to your board and pins will automatically version it for you. you can also read a specific version of the pin at a later date, and your model will be loaded right into memory!</p>
+<p>we can see that pins helps with scale, but what about context?</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -645,9 +661,9 @@
 <h2>version::vetiver</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>model_board.pin_meta(<span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>model_board <span class="sc">%&gt;%</span> <span class="fu">pin_meta</span>(<span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_board <span class="sc">%&gt;%</span> <span class="fu">pin_meta</span>(<span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model_board.pin_meta(<span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <pre><code>created: 20220719T142221Z
@@ -664,7 +680,7 @@ type: joblib</code></pre>
   - vetiver
   - scikit-learn</code></pre>
 <aside class="notes">
-<p>okay, well, how did that solve our problems with scale and context?</p>
+<p>with infrastructure to version our model, it is time to</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -705,7 +721,8 @@ type: joblib</code></pre>
 </ul>
 <p><img data-src="images/fire.JPG" data-margin-left="700" data-margin-right="auto" alt="cartoon cookie in this is fine fire meme" height="500"></p>
 <aside class="notes">
-<p>XML is best known for displaying documents on the internet - baking cookies on an open flame (image) - models in XML (image?)</p>
+<p>one option was to deploy models in XML. in the baking world, this is like baking a cookie over an open flame– while fires are, very portable, they’re not very customizable in temperature</p>
+<p>XML is best known for displaying documents on the internet, but using PMML to deploy your model gives you only limited options in models. so, this was not the right place for most data scientists.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -730,15 +747,9 @@ type: joblib</code></pre>
 </ul>
 <p><img data-src="images/waffle.png" data-margin-left="700" data-margin-right="auto" alt="cartoon cookie with waffle iron pattern" height="400"></p>
 <aside class="notes">
-<ul>
-<li>smaller
-<ul>
-<li>baking cookies in a waffle iron (image)</li>
-<li>models saved in a database</li>
-<li>works best if your workflow is centered around a database that you can easily interact with</li>
-<li>not always as accessible to non-technical team members</li>
-</ul></li>
-</ul>
+<p>our next option was to deploy models in databases, using sql stored procedures</p>
+<p>baking cookies in a waffle iron– works reaaalllyyyy well for some recipes, but others you just kind of end up with partially burned/partially goopy mess</p>
+<p>this is a great option for people who have model lifecycles based around a database that you can easily interact with. but this is a bit too niche to be a best-case scenario, so we had to continue our quest find the perfect method of deploying models.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -764,14 +775,10 @@ type: joblib</code></pre>
 </ul>
 <p><img data-src="images/ovenbffs.png" data-margin-left="700" data-margin-right="auto" alt="cartoon cookie holding hands with cartoon oven" height="350"></p>
 <aside class="notes">
-<p>this can be a rest api on your computer, in the cloud ie, SAGEMAKER, ETC, if you’re more interested in this, James Blair is hosting ____</p>
-<p>if youre interested in seeing this in RSConnnect, gagan and xu fei are talking standard, easy can deploy anything you write in R or Python POST/GET/QUERY to these endpoints</p>
-<pre><code>- baking cookies in an oven (image)
-- models living in application interfaces
-- easy to use with other tools, so you keep the same workflow
-- often comes with visual documentation to be accessible to many different skill levels
-- interact in the browser to debug
-- straightforward to put inside docker containers</code></pre>
+<p>… best friends with your OVEN, known for its predictable temperatures and easy to use interface that makes baking a great activity for all skill levels.</p>
+<p>rest apis are interfaces that can connect applications in a standardized way.</p>
+<p>Any model you can write, you can deploy to a rest API. You can interact in the browser to debug. You can deploy on your computer, an on-prem server, inside a docker container, or in pretty much all cloud providers. I don’t have time to go into all the different deployment options, but I know my colleague James Blair is hosting a birds of a feather session for AWS Sagemaker that includes vetiver tomorrow morning, and there’s another talk called “Yes, You can Use Python With RStudio Team” by my colleagues Xu Fei and Gagan tomorrow afternoon.</p>
+<p>And one more reason to be excited about rest APIs–they are quite accessible for different skill levels, with visual documentation automatically created in the API endpoint, so teammates who maybe aren’t as modeling obsessed as present company are still able to discover and interact with your model, without even having to download R or Python.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -788,26 +795,71 @@ type: joblib</code></pre>
 <h2>vetiver</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p><em>in r</em></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(plumber)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">vetiver_api</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
 <p><em>in python</em></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>api <span class="op">=</span> VetiverAPI(v)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>api.run()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:50%;">
-<p><em>in r</em></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(plumber)</span>
-<span id="cb13-2"><a href="#cb13-2"></a></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">vetiver_api</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="section-4" class="slide level2" data-background-video="images/apidocs.mp4">
+<section id="section-4" class="slide level2" data-background-image="images/deploy12.png" data-background-position="center">
 <h2></h2>
+<aside class="notes">
+<p>prepopulated with</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="section-5" class="slide level2" data-background-image="images/deploy22.gif">
+<h2></h2>
+<aside class="notes">
+<p>ping endpoint predict endpoint interact with the model see more information about your API</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="section-6" class="slide level2" data-background-image="images/deploy3.gif">
+<h2></h2>
+<aside class="notes">
+<p>you can make predictions, including batch predictions, from your endpoint from INSIDE YOUR NOTEBOOK–feels like it is inside your environment, even though it ISNT</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="monitor" class="slide level2">
 <h2>monitor</h2>
 <p><img data-src="images/burnt.jpg" data-margin-left="700" data-margin-right="auto" alt="cartoon cookie, slightly burnt" height="700"></p>
 <aside class="notes">
-<p>have a plan for how long your cookies are in the oven, but you have to keep an eye on them and adjust your plan if things aren’t working out</p>
+<p>now that the cookies are in the API oven, we have to keep an eye on them so they don’t burn!</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -846,9 +898,10 @@ type: joblib</code></pre>
 <li>monitor for model drift</li>
 </ul>
 <aside class="notes">
+<p>model drift when your model’s performance metrics start decaying. this is SO IMPORTANT TO TRACK. models fail silently! and they can still run with no error, even if your accuracy is zero percent–</p>
+<p>if you are not monitoring your model in some way, you are oblivious to decay.</p>
 <ul>
-<li>models fail silently! and they can still run with no error, even if your accuracy is zero percent more detail here</li>
-<li>i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt!</li>
+<li>i listened to waaaayyyy more jonas brothers in 2012 than i do now, and my spotify recommendation model has had to adapt to keep a customer!</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -870,7 +923,8 @@ type: joblib</code></pre>
 <li>know what to do when things go wrong</li>
 </ul>
 <aside class="notes">
-<p>if performance is declining, - back to model versioning! - retraining model? - new model type altogether?</p>
+<p>if performance is declining, - retraining model? - new model type altogether?</p>
+<p>if you are using model versioning, it becomes easier to roll back to the latest version</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -887,6 +941,16 @@ type: joblib</code></pre>
 <h2>vetiver</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p><em>in r</em></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>metrics <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="fu">augment</span>(v, <span class="at">new_data =</span> new) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">vetiver_compute_metrics</span>(</span>
+<span id="cb13-4"><a href="#cb13-4"></a>        date_col, </span>
+<span id="cb13-5"><a href="#cb13-5"></a>        <span class="st">"week"</span>, </span>
+<span id="cb13-6"><a href="#cb13-6"></a>        mpg, </span>
+<span id="cb13-7"><a href="#cb13-7"></a>        .pred</span>
+<span id="cb13-8"><a href="#cb13-8"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
 <p><em>in python</em></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>metrics <span class="op">=</span> vetiver.compute_metrics(</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    new_data, </span>
@@ -896,23 +960,44 @@ type: joblib</code></pre>
 <span id="cb14-6"><a href="#cb14-6"></a>    <span class="st">"mpg"</span>, </span>
 <span id="cb14-7"><a href="#cb14-7"></a>    <span class="st">"preds"</span></span>
 <span id="cb14-8"><a href="#cb14-8"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:50%;">
-<p><em>in r</em></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>metrics <span class="ot">&lt;-</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>    <span class="fu">augment</span>(v, <span class="at">new_data =</span> new) <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>    <span class="fu">vetiver_compute_metrics</span>(</span>
-<span id="cb15-4"><a href="#cb15-4"></a>        date_col, </span>
-<span id="cb15-5"><a href="#cb15-5"></a>        <span class="st">"week"</span>, </span>
-<span id="cb15-6"><a href="#cb15-6"></a>        mpg, </span>
-<span id="cb15-7"><a href="#cb15-7"></a>        .pred</span>
-<span id="cb15-8"><a href="#cb15-8"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+<aside class="notes">
+<p>vetiver monitoring looks at a model over time, since, even if time isn’t a feature used for predictions, it does affect your model.</p>
+<p>you will start with a dataframe with information you’ve gathered since you deployed your model. vetiver needs column names for</p>
+<ul>
+<li><p>name of the column with the date the prediction was made</p></li>
+<li><p>name of column for the actual value</p></li>
+<li><p>name of column for predicted values</p></li>
+<li><p>time frame you’re wanting to aggregate (1 week, 2 weeks)</p></li>
+<li><p>set of metrics you wish to compute (R Side has a default, python you’ll have to specify what metrics(RMSE, R^2, etc))</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="vetiver-2" class="slide level2">
 <h2>vetiver</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p><em>in r</em></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># compute, then ... </span></span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a>model_board <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="fu">vetiver_pin_metrics</span>(</span>
+<span id="cb15-5"><a href="#cb15-5"></a>        metrics, </span>
+<span id="cb15-6"><a href="#cb15-6"></a>        <span class="st">"metrics_pin_name"</span>, </span>
+<span id="cb15-7"><a href="#cb15-7"></a>        <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
 <p><em>in python</em></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># compute, then ... </span></span>
 <span id="cb16-2"><a href="#cb16-2"></a></span>
@@ -922,35 +1007,55 @@ type: joblib</code></pre>
 <span id="cb16-6"><a href="#cb16-6"></a>    <span class="st">"metrics_pin_name"</span>, </span>
 <span id="cb16-7"><a href="#cb16-7"></a>    overwrite <span class="op">=</span> <span class="va">True</span></span>
 <span id="cb16-8"><a href="#cb16-8"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:50%;">
-<p><em>in r</em></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># compute, then ... </span></span>
-<span id="cb17-2"><a href="#cb17-2"></a></span>
-<span id="cb17-3"><a href="#cb17-3"></a>model_board <span class="sc">%&gt;%</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="fu">vetiver_pin_metrics</span>(</span>
-<span id="cb17-5"><a href="#cb17-5"></a>        metrics, </span>
-<span id="cb17-6"><a href="#cb17-6"></a>        <span class="st">"metrics_pin_name"</span>, </span>
-<span id="cb17-7"><a href="#cb17-7"></a>        <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+<aside class="notes">
+<p>once computed, you can pin the dataframe of metrics to keep a log of your model performance! give it a fancy name, and you can also specify if you would like to overwrite any overlapping dates from the last time you computed/pinned metrics.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="vetiver-3" class="slide level2">
 <h2>vetiver</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p><em>in r</em></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># compute and pin, then ...</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">vetiver_plot_metrics</span>(metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
 <p><em>in python</em></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># compute and pin, then ...</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a></span>
 <span id="cb18-3"><a href="#cb18-3"></a>vetiver.plot_metrics(metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:50%;">
-<p><em>in r</em></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># compute and pin, then ...</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="fu">vetiver_plot_metrics</span>(metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p><img data-src="images/monitor.png">{fig-alt=“line chart showing model performance metrics over time” class = “center”}</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/monitor.png" alt="line chart showing model performance metrics over time" height="500"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>finally, you can plot these metrics to get an out-of-the-box</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="putting-it-all-together" class="slide level2">
 <h2>putting it all together</h2>
@@ -967,19 +1072,37 @@ type: joblib</code></pre>
 <li>data validation</li>
 <li>more!</li>
 </ul>
+<aside class="notes">
+<p>versioning, deploying, and monitoring are the three main verbs i want you all to walk away with when thinking about vetiver. but,</p>
+<p>model cards: - partially automated rmarkdown template - relevant factors for your model: environmental, technical, or ethical</p>
+<p>input data prototype: - validate data types at prediction time - data at the actual API endpoint does not look the same as when you trained it. (dates)</p>
+<p>…many more best practices to keep in mind…</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
-<section id="section-5" class="slide level2">
+<section id="section-7" class="slide level2">
 <h2></h2>
 <p><img data-src="images/final.png" alt="cartoon cookies holding hands, with the last cookie in thought about the MLOps cycle"></p>
 <aside class="notes">
 <p>must be end of our time, our cookies are taking a bow…</p>
 <p>challenge you think of what your own data science workflow…where can you add in MLOps best practices to make it better?</p>
-<p>check out vetiver in PYTHON OR R in the open source or pro products lounge</p>
+<p>check out vetiver in PYTHON OR R, and come visit in the open source or pro products lounge</p>
 <hr>
-<p>what’s next for vetiver? taking a nap! building out workflows for cloud</p>
-<p>what models are supported?</p>
+<p>what’s next for vetiver? taking a nap! building out workflows for cloud, supporting more model types</p>
+<p>what models are supported? tidymodels workflow caret mlr3 XGBoost ranger lm() and glm() torch scikit learn</p>
 <p>explainability?</p>
+<p>how does monitoring work? partially deployment related. in connect, you can run a cron job! most cloud vendors will allow you to run scripts on some sort of cadence</p>
+<p>what if SQL? tidypredict :)</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
